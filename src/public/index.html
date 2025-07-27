@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student List Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../output.css" />
+    <style>
+      .ios-crystal {
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      }
+
+      body::before {
+        content: "";
+        background-image: url("https://cdn.prod.website-files.com/6718da5ecf694c9af0e8d5d7/677f9f10addf1c3dadc59b61_673b6d70b9e309042b6fefa1_student_performance_evaluation_form_template_Thumbnail.webp"); /* ← Replace with your own image */
+        background-size: cover;
+        background-position: center;
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+      }
+
+      body::after {
+        content: "";
+        background: rgba(0, 0, 0, 0.6);
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen font-sans antialiased bg-gradient-to-br from-blue-100 to-indigo-200"
+  >
+    <div
+      class="max-w-3xl mx-auto mt-6 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 ios-crystal shadow-xl"
+      data-aos="fade-up"
+      data-aos-duration="600"
+    >
+      <h1
+        class="text-3xl sm:text-4xl font-extrabold text-center mb-8 text-white"
+        data-aos="fade-in"
+        data-aos-delay="100"
+      >
+        Student List Manager
+      </h1>
+
+      <!-- Add/Edit -->
+      <section
+        class="mb-10 ios-crystal p-6 shadow-md"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="200"
+      >
+        <h2
+          id="formTitle"
+          class="flex items-center gap-2 text-xl font-semibold mb-5 text-white"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Add New Student</span>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <input
+            id="name"
+            type="text"
+            placeholder="Student Name"
+            class="w-full border border-gray-200 rounded-lg p-3 bg-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+          <label for="grade" class="sr-only">Grade</label>
+          <select
+            id="grade"
+            class="w-full border border-gray-200 rounded-lg p-3 bg-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            aria-label="Grade"
+          >
+            <option value="" disabled selected>Select Grade</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="F">F</option>
+          </select>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button
+            id="submitButton"
+            onclick="addOrUpdateStudent()"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg p-3 transition"
+          >
+            Add Student
+          </button>
+          <button
+            id="cancelButton"
+            onclick="resetForm()"
+            class="w-full hidden bg-slate-400 hover:bg-slate-500 text-white font-medium rounded-lg p-3 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </section>
+
+      <!-- Filter & Sort -->
+      <section
+        class="mb-10 ios-crystal p-6 shadow-md"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="300"
+      >
+        <h2
+          class="flex items-center gap-2 text-xl font-semibold mb-5 text-white"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
+            <path
+              fill-rule="evenodd"
+              d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Filter & Sort</span>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <input
+            id="searchName"
+            type="text"
+            placeholder="Search by Name"
+            oninput="filterAndSort()"
+            class="w-full border border-gray-200 rounded-lg p-3 bg-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+          <label for="filterGrade" class="sr-only">Filter by Grade</label>
+          <select
+            id="filterGrade"
+            class="w-full border border-gray-200 rounded-lg p-3 bg-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            aria-label="Filter by Grade"
+          >
+            <option value="" disabled selected>Filter by Grade</option>
+            <option value="all">All Grades</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="F">F</option>
+          </select>
+          <label for="sortOrder" class="sr-only">Sort Order</label>
+          <select
+            id="sortOrder"
+            class="w-full border border-gray-200 rounded-lg p-3 bg-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            aria-label="Sort Order"
+          >
+            <option value="" disabled selected>Select sort</option>
+            <option value="name-asc">Sort by Name (A-Z)</option>
+            <option value="name-desc">Sort by Name (Z-A)</option>
+            <option value="grade-asc">Sort by Grade (A-F)</option>
+            <option value="grade-desc">Sort by Grade (F-A)</option>
+          </select>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button
+              onclick="filterAndSort()"
+              class="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-lg p-3 transition"
+            >
+              Apply
+            </button>
+            <button
+              onclick="resetFilters()"
+              class="w-full sm:w-auto bg-slate-400 hover:bg-slate-500 text-white font-medium rounded-lg p-3 transition"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- List -->
+      <section
+        class="mb-10"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="400"
+      >
+        <h2
+          class="flex items-center gap-2 text-xl font-semibold mb-5 text-gray-800 dark:text-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v7.7l-3.65 3.65l-2.125-2.125l-4.25 4.225l2.55 2.55zm6-8h6v-2h-6zm0-4h6V7h-6zm6.35 13l-3.55-3.55l1.425-1.4l2.125 2.125l4.25-4.25L23 16.35zM8 13q.425 0 .713-.288T9 12t-.288-.712T8 11t-.712.288T7 12t.288.713T8 13m0-4q.425 0 .713-.288T9 8t-.288-.712T8 7t-.712.288T7 8t.288.713T8 9"
+            />
+          </svg>
+          Student List
+        </h2>
+
+        <div
+          id="studentCards"
+          class="grid gap-4 grid-cols-1 sm:grid-cols-2"
+        ></div>
+      </section>
+
+      <!-- Total -->
+      <div
+        class="text-center space-y-4"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="500"
+      >
+        <p class="text-base text-gray-700">
+          Total Students:
+          <span id="totalStudents" class="font-bold" aria-live="polite">0</span>
+        </p>
+        <div
+          class="flex flex-col sm:flex-row justify-center gap-3 max-w-xs mx-auto"
+        >
+          <button
+            onclick="exportCSV()"
+            class="w-full sm:w-36 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg p-3 transition"
+          >
+            Export CSV
+          </button>
+          <button
+            onclick="clearAll()"
+            class="w-full sm:w-36 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-lg p-3 transition"
+          >
+            Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div
+      id="toast-container"
+      class="fixed top-4 left-4 right-4 sm:right-6 sm:left-auto max-w-full sm:max-w-xs z-50 space-y-2"
+    ></div>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="../script/form.js"></script>
+  </body>
+</html>
